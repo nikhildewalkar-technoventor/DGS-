@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Digital Journey | K–12 Student Portfolio</title>
+  <meta name="description" content="A fun, modern K–12 student learning and achievement portfolio">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <section id="authScreen" class="auth-shell">
+    <div class="auth-brand">
+      <div class="brand-mark">MJ</div>
+      <span>My Digital Journey</span>
+    </div>
+    <div class="auth-grid">
+      <div class="auth-hero">
+        <p class="eyebrow">STUDENT PORTFOLIO</p>
+        <h1>Think.<br>Build.<br><em>Showcase.</em></h1>
+        <p class="hero-copy">A personal space where students can document projects, activities, achievements and sports — all in one place.</p>
+        <div class="hero-pills"><span>Makerspace</span><span>Achievements</span><span>Gallery</span></div>
+      </div>
+      <div class="auth-card">
+        <div class="tabs">
+          <button class="tab active" data-auth-tab="login">Login</button>
+          <button class="tab" data-auth-tab="signup">Create account</button>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+          <h2>Welcome back</h2>
+          <p class="muted">Login with your student username.</p>
+          <label>Username<input id="loginUsername" autocomplete="username" required placeholder="e.g. rahul09"></label>
+          <label>Password<div class="password-wrap"><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Your password"><button type="button" class="eye" data-toggle-password="loginPassword">Show</button></div></label>
+          <button class="primary full" type="submit">Login</button>
+          <button type="button" class="link-btn" id="forgotBtn">Forgot password?</button>
+        </form>
+
+        <form id="signupForm" class="auth-form hidden">
+          <h2>Create your portfolio</h2>
+          <p class="muted">No student email required.</p>
+          <div class="two">
+            <label>Full name<input id="signupName" required placeholder="Rahul Sharma"></label>
+            <label>Roll no.<input id="signupRoll" placeholder="09"></label>
+          </div>
+          <div class="two">
+            <label>Class<input id="signupClass" required placeholder="9-A"></label>
+            <label>School<input id="signupSchool" required placeholder="Your school"></label>
+          </div>
+          <label>Username<input id="signupUsername" required minlength="4" maxlength="24" pattern="[A-Za-z0-9._-]+" placeholder="rahul09"></label>
+          <div class="two">
+            <label>Password<div class="password-wrap"><input id="signupPassword" type="password" required minlength="6" placeholder="At least 6 characters"><button type="button" class="eye" data-toggle-password="signupPassword">Show</button></div></label>
+            <label>Confirm password<input id="signupConfirm" type="password" required placeholder="Repeat password"></label>
+          </div>
+          <div class="strength"><span id="strengthBar"></span></div>
+          <button class="primary full" type="submit">Create account</button>
+          <p class="tiny">By creating an account, you agree to use this portfolio for genuine school work.</p>
+        </form>
+
+        <form id="resetForm" class="auth-form hidden">
+          <h2>Reset password</h2>
+          <p class="muted">Enter your username. A reset link will be sent to the recovery address configured by your school/admin.</p>
+          <label>Username<input id="resetUsername" required></label>
+          <button class="primary full" type="submit">Send reset link</button>
+          <button type="button" class="link-btn" id="backLoginBtn">Back to login</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div id="appShell" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="side-brand"><div class="brand-mark small">MJ</div><div><strong>My Digital</strong><span>Journey</span></div></div>
+      <div id="userMini" class="user-mini"></div>
+      <nav>
+        <button class="nav-item active" data-page="overview">⌂ <span>Overview</span></button>
+        <button class="nav-item" data-page="profile">◎ <span>My Profile</span></button>
+        <button class="nav-item" data-page="projects">🧩 <span>Makerspace</span></button>
+        <button class="nav-item" data-page="achievements">★ <span>Achievements</span></button>
+        <button class="nav-item" data-page="sports">◉ <span>Sports</span></button>
+        <button class="nav-item" data-page="gallery">▦ <span>Gallery</span></button>
+      </nav>
+      <button id="logoutBtn" class="logout">↪ Log out</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow" id="pageEyebrow">MY DIGITAL JOURNEY</p><h1 id="pageTitle">Overview</h1></div>
+        <div class="top-actions"><span id="connectionDot" class="status-dot">Connecting…</span><button id="publicBtn" class="ghost">Preview profile ↗</button></div>
+      </header>
+
+      <section id="overview" class="page active">
+        <div class="welcome-card">
+          <div><p class="eyebrow">YOUR JOURNEY</p><h2 id="welcomeTitle">Welcome!</h2><p id="welcomeText">Your portfolio is your story — keep building it.</p></div>
+          <div class="avatar xl" id="overviewAvatar">?</div>
+        </div>
+        <div class="stats">
+          <div class="stat"><span>Curriculum</span><strong id="countProjects">0</strong></div>
+          <div class="stat"><span>Beyond Curriculum</span><strong id="countActivities">0</strong></div>
+          <div class="stat"><span>Achievements</span><strong id="countAchievements">0</strong></div>
+          <div class="stat"><span>Sports</span><strong id="countSports">0</strong></div>
+        </div>
+        <div class="section-head"><div><p class="eyebrow">RECENT WORK</p><h2>Keep your story growing</h2></div><button class="primary" data-page-jump="projects">+ Add curriculum activity</button></div>
+        <div id="recentGrid" class="card-grid"></div>
+      </section>
+
+      <section id="profile" class="page">
+        <div class="section-head"><div><p class="eyebrow">ABOUT ME</p><h2>My profile</h2></div></div>
+        <div class="profile-layout">
+          <div class="profile-card"><div id="profileAvatar" class="avatar xxl">?</div><input id="profilePhoto" type="file" accept="image/*" hidden><button id="photoBtn" class="ghost">Change photo</button><p class="tiny">JPG, PNG or WebP</p></div>
+          <form id="profileForm" class="form-card">
+            <div class="two"><label>Full name<input id="profileName" required></label><label>Roll no.<input id="profileRoll"></label></div>
+            <div class="two"><label>Class<input id="profileClass" required></label><label>School<input id="profileSchool" required></label></div>
+            <label>Bio<textarea id="profileBio" rows="5" placeholder="Tell people what you love learning and building..."></textarea></label>
+            <div class="two"><label>Interests<input id="profileInterests" placeholder="Robotics, design, science"></label><label>Location<input id="profileLocation" placeholder="City"></label></div>
+            <button class="primary" type="submit">Save profile</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="projects" class="page makerspace-page">
+        <div class="makerspace-hero">
+          <div><p class="eyebrow">🧩 LEARN • MAKE • EXPLORE</p><h2>Makerspace</h2><p>One space for everything you learn, make and explore — inside and beyond the curriculum.</p></div>
+          <div class="hero-stickers"><span>💡 Ideas</span><span>🔧 Making</span><span>🚀 Exploring</span></div>
+        </div>
+        <div class="maker-tabs">
+          <button class="maker-tab active" data-maker-tab="curriculum"><span>📚</span><div><strong>Curriculum Activities</strong><small>What I learned & performed in class</small></div></button>
+          <button class="maker-tab" data-maker-tab="beyond"><span>🌟</span><div><strong>Beyond Curriculum</strong><small>Extra learning, clubs & explorations</small></div></button>
+        </div>
+        <div id="curriculumTrack" class="maker-track active">
+          <div class="section-head"><div><p class="eyebrow">📚 LEARNING IN ACTION</p><h3>Curriculum Activities</h3><p class="page-intro">Document practical activities, experiments, builds and classroom learning experiences.</p></div><button class="primary" data-add="projects">+ Add curriculum activity</button></div>
+          <div class="maker-journey">
+          <div class="journey-step"><b>01</b><span>💡 Idea</span><small>Find a problem</small></div>
+          <div class="journey-line"></div>
+          <div class="journey-step"><b>02</b><span>✏️ Design</span><small>Plan your solution</small></div>
+          <div class="journey-line"></div>
+          <div class="journey-step"><b>03</b><span>🔧 Build</span><small>Make the prototype</small></div>
+          <div class="journey-line"></div>
+          <div class="journey-step"><b>04</b><span>🧪 Test</span><small>Try and observe</small></div>
+          <div class="journey-line"></div>
+          <div class="journey-step"><b>05</b><span>🔁 Improve</span><small>Fix and refine</small></div>
+          <div class="journey-line"></div>
+          <div class="journey-step"><b>06</b><span>🏆 Showcase</span><small>Share the outcome</small></div>
+        </div>
+          <div id="projectsGrid" class="card-grid"></div>
+        </div>
+        <div id="beyondTrack" class="maker-track">
+          <div class="section-head"><div><p class="eyebrow">🌟 BEYOND THE SYLLABUS</p><h3>Beyond Curriculum</h3><p class="page-intro">Showcase extra-curricular activities, clubs, workshops, competitions and personal learning.</p></div><button class="primary" data-add="activities">+ Add beyond-curriculum activity</button></div>
+          <div class="beyond-banner"><span>🌱</span><div><strong>Learning doesn't stop at the timetable.</strong><small>Capture the things you tried, joined, created and discovered outside regular curriculum.</small></div></div>
+          <div id="activitiesGrid" class="card-grid"></div>
+        </div>
+      </section>
+      <section id="achievements" class="page"><div class="section-head"><div><p class="eyebrow">MILESTONES</p><h2>Achievements</h2></div><button class="primary" data-add="achievements">+ Add achievement</button></div><div id="achievementsGrid" class="card-grid"></div></section>
+      <section id="sports" class="page"><div class="section-head"><div><p class="eyebrow">BEYOND THE CLASSROOM</p><h2>Sports</h2></div><button class="primary" data-add="sports">+ Add sport</button></div><div id="sportsGrid" class="card-grid"></div></section>
+      <section id="gallery" class="page"><div class="section-head"><div><p class="eyebrow">MEMORIES</p><h2>Gallery</h2></div><button class="primary" id="galleryAddBtn">+ Add photos</button></div><input id="galleryInput" type="file" accept="image/*" multiple hidden><div id="galleryGrid" class="gallery-grid"></div></section>
+    </main>
+  </div>
+
+  <dialog id="itemDialog" class="modal">
+    <form method="dialog" id="itemForm" class="modal-card">
+      <button type="button" class="modal-close" id="modalClose">×</button>
+      <p class="eyebrow" id="modalEyebrow">ADD</p><h2 id="modalTitle">New item</h2>
+      <input id="itemId" type="hidden"><input id="itemType" type="hidden">
+      <label>Title<input id="itemTitle" required maxlength="120"></label>
+      <label id="categoryLabel">Category<input id="itemCategory" maxlength="80"></label>
+      <div id="makerspaceFields" class="makerspace-fields hidden">
+        <div class="form-note">📚 <strong>Curriculum Activity</strong><small>Tell the story of what you did, why you did it and what you learned.</small></div>
+        <div class="two"><label>Subject<input id="itemSubject" maxlength="80" placeholder="Science, Maths, AI..." ></label><label>Year / Class<input id="itemDate" placeholder="2026 / Grade 9"></label></div>
+        <label>Learning Objective<textarea id="itemObjective" rows="2" maxlength="500" placeholder="What concept or skill was this activity designed to teach?"></textarea></label>
+        <label>Materials / Resources<textarea id="itemMaterials" rows="2" maxlength="500" placeholder="Components, tools, books, resources..." ></textarea></label>
+        <label>What I Did<textarea id="itemWhatDid" rows="3" maxlength="800" placeholder="Describe the steps you performed in your own words."></textarea></label>
+        <label>What I Learned<textarea id="itemOutcome" rows="3" maxlength="700" placeholder="What did you understand, discover or improve?"></textarea></label>
+        <div class="two"><label>Journey stage
+          <select id="itemStage"><option value="Idea">💡 Idea</option><option value="Design">✏️ Design</option><option value="Build">🔧 Build</option><option value="Test">🧪 Test</option><option value="Improve">🔁 Improve</option><option value="Showcase">🏆 Showcase</option></select>
+        </label><label>Skills learned<input id="itemSkills" maxlength="300" placeholder="Observation, teamwork, problem-solving"></label></div>
+      </div>
+      <label id="normalDescriptionLabel">Description<textarea id="itemDescription" rows="5" maxlength="1000"></textarea></label>
+      <label id="normalDateLabel">Date / year<input id="itemDateNormal" placeholder="2026"></label>
+      <label>Photo<input id="itemPhoto" type="file" accept="image/*"></label>
+      <div class="modal-actions"><button type="button" class="ghost" id="modalCancel">Cancel</button><button class="primary" type="submit">Save</button></div>
+    </form>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
